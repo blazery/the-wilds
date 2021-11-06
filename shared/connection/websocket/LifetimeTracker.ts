@@ -1,13 +1,14 @@
 import { WebSocket } from "ws";
+import { ISocketInterface } from "./types/ISocketInterface";
 
 
-export class LifetimeTracker {
+export default class LifetimeTracker {
 
-    protected ws: WebSocket;
+    protected ws: ISocketInterface;
     protected isAlive: boolean = false;
     protected timeout: NodeJS.Timeout | undefined;
 
-    constructor(ws: WebSocket) {
+    constructor(ws: ISocketInterface) {
         this.ws = ws;
 
         if (ws.readyState === WebSocket.CONNECTING

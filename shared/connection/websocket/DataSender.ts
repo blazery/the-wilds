@@ -1,10 +1,11 @@
 import { WebSocket } from "ws";
+import { ISocketInterface } from "./types/ISocketInterface";
 
-export class DataSender {
+export default class DataSender {
 
-    private ws: WebSocket;
+    private ws: ISocketInterface;
 
-    public constructor(ws: WebSocket) {
+    public constructor(ws: ISocketInterface) {
         this.ws = ws;
     }
 

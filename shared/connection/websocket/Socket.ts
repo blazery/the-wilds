@@ -1,19 +1,17 @@
-import { Handler } from "express";
-import { forEachChild } from "typescript";
-import { WebSocket } from "ws";
-import { DataSender } from "./DataSender";
-import { LifetimeTracker } from "./LifetimeTracker";
+import DataSender from "./DataSender";
+import LifetimeTracker from "./LifetimeTracker";
+import { ISocketInterface } from "./types/ISocketInterface";
 
 
-export type HandlerSignature = (msg: string, socket: Socket) => void;
-export class Socket {
+export type HandlerSignature = (msg: string, socket: ISocketInterface) => void;
+export default class Socket {
     protected handlers: HandlerSignature[] = [];
-    protected ws: WebSocket;
+    protected ws: ISocketInterface;
 
     protected sender?: DataSender;
     protected ltt?: LifetimeTracker;
 
-    public constructor(ws: WebSocket) {
+    public constructor(ws: ISocketInterface) {
         this.ws = ws;
         this.setReceiver();
     }
@@ -39,7 +37,7 @@ export class Socket {
     private setReceiver() {
         this.ws.on('message', (msg: string) => {
             for (const handler of this.handlers) {
-                handler(msg, this);
+                handler(msg, this.ws);
             }
         })
     }
