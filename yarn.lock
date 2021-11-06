@@ -1777,6 +1777,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/module-alias@npm:^2":
+  version: 2.0.1
+  resolution: "@types/module-alias@npm:2.0.1"
+  checksum: c6d6d30605833b03465c39760df42616fd24e4f532a29bb77954220885feb21eb2d84dd38eed68b0c18997e6930fdc5914d2dc6fd7cc5d110a42068d2204e11e
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:^16.11.6":
   version: 16.11.6
   resolution: "@types/node@npm:16.11.6"
@@ -6039,6 +6046,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"module-alias@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "module-alias@npm:2.2.2"
+  checksum: 4b5543f834b484033e5bd184096ca8276b9195e32e88883ee6ea8d3a4789d97c470d26f5fa7271bd7a26588bf67e4d27dbdb594ee327aef1c9619d855dc78342
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -7782,12 +7796,14 @@ __metadata:
     "@parcel/transformer-typescript-tsc": ^2.0.0
     "@types/cors": ^2
     "@types/express": ^4.17.13
+    "@types/module-alias": ^2
     "@types/node": ^16.11.6
     "@types/ws": ^8.2.0
     "@yarnpkg/pnpify": ^3.1.1-rc.2
     "@yarnpkg/sdks": ^2.5.0
     cors: ^2.8.5
     express: ^4.17.1
+    module-alias: ^2.2.2
     nodemon: ^2.0.14
     parcel: ^2.0.0
     pixi.js: ^6.1.3

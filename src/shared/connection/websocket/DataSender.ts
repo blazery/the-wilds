@@ -1,5 +1,4 @@
-import { WebSocket } from "ws";
-import { ISocketInterface } from "./types/ISocketInterface";
+import { ISocketInterface, WebsocketStatus } from "./types/ISocketInterface";
 
 export default class DataSender {
 
@@ -10,7 +9,7 @@ export default class DataSender {
     }
 
     public sendMessage(msg: string | Object) {
-        if (this.ws.readyState === WebSocket.OPEN) {
+        if (this.ws.readyState === WebsocketStatus.OPEN) {
             this.ws.send(msg, { binary: false });
             return true
         }

@@ -4,5 +4,5 @@
     ],
     "ext": ".ts,.js",
     "ignore": [],
-    "exec": "yarn ts-node ./server/src/index.ts"
+    "exec": "yarn ts-node ./src/server/index.ts"
 }

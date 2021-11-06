@@ -1,5 +1,4 @@
-import { WebSocket } from "ws";
-import { ISocketInterface } from "./types/ISocketInterface";
+import { ISocketInterface, WebsocketStatus } from "./types/ISocketInterface";
 
 
 export default class LifetimeTracker {
@@ -11,8 +10,8 @@ export default class LifetimeTracker {
     constructor(ws: ISocketInterface) {
         this.ws = ws;
 
-        if (ws.readyState === WebSocket.CONNECTING
-            || ws.readyState === WebSocket.OPEN) {
+        if (ws.readyState === WebsocketStatus.CONNECTING
+            || ws.readyState === WebsocketStatus.OPEN) {
             this.isAlive = true;
         }
 
@@ -30,7 +29,7 @@ export default class LifetimeTracker {
         const socket = this.ws;
         if (!socket) return;
 
-        if (socket.readyState !== WebSocket.OPEN || !this.isAlive) {
+        if (socket.readyState !== WebsocketStatus.OPEN || !this.isAlive) {
             socket.terminate();
             return
         }
@@ -42,7 +41,7 @@ export default class LifetimeTracker {
 
     protected setupListener() {
         this.ws.on('pong', () => {
-            if (this.ws.readyState === WebSocket.OPEN) {
+            if (this.ws.readyState === WebsocketStatus.OPEN) {
                 this.isAlive = true;
                 this.ws.pong();
             }

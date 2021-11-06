@@ -1,4 +1,8 @@
+import "module-alias"
+
 import *  as PIXI from "pixi.js";
+import WebsocketFactory from '../../shared/connection/websocket/WebsocketFactory';
+import SocketWrapper from "./websocket/SocketWrapper";
 
 
 // Create the application helper and add its render target to the page
@@ -22,12 +26,11 @@ if (container) {
 
 
 const socket = new WebSocket('ws://localhost:8999')
+const wrappedSocket = WebsocketFactory.setupSocket(new SocketWrapper(socket))
 
 
-socket.onopen = (ev) => {
+wrappedSocket.registerHandler(() => {
     socket.send('hello fuckers')
-}
+})
 
-socket.onmessage = (ev) => {
-    alert(ev.data);
-}
+wrappedSocket.send("hello fuckers")

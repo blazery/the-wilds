@@ -1,17 +1,21 @@
 
-import * as express from 'express';
+// add this to get the shared folder working.
+import 'module-alias/register';
+
+import express from 'express';
 import * as http from 'http';
 import * as WebSocket from 'ws';
-import * as cors from 'cors';
-import WebsocketFactory from '~shared/connection/websocket/WebsocketFactory';
-import { ISocketInterface } from '~shared/connection/websocket/types/ISocketInterface';
+import cors from 'cors';
 
-const app = express.default();
+import WebsocketFactory from '../shared/connection/websocket/WebsocketFactory';
+import { ISocketInterface } from '../shared/connection/websocket/types/ISocketInterface';
+
+const app = express();
 
 //initialize a simple http server
 const server = http.createServer(app);
 
-//initialize the WebSocket server instance
+//initialize the WebSocket server instance 
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws: WebSocket) => {
@@ -37,7 +41,7 @@ const port = 3000;
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
-app.use(cors.default())
+app.use(cors())
 app.use(express.static('public'))
 
 
