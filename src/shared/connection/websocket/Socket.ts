@@ -1,12 +1,13 @@
 import cuid from "cuid";
 import DataSender from "./DataSender";
 import LifetimeTracker from "./LifetimeTracker";
+import IConnectecSocketInterface, { CloseHandlerSignature, HandlerSignature } from "./types/IConnectedSocketInterface";
 import { ISocketInterface } from "./types/ISocketInterface";
 
 
-export type HandlerSignature = (msg: string, socket: ISocketInterface) => void;
-export default class Socket {
+export default class Socket implements IConnectecSocketInterface {
     protected handlers: HandlerSignature[] = [];
+    protected closeHandlers: CloseHandlerSignature[] = [];
     protected ws: ISocketInterface;
     protected id: string;
 
@@ -42,10 +43,20 @@ export default class Socket {
         this.handlers.push(handler);
     }
 
+    public registerCloseHandler(handler: CloseHandlerSignature) {
+        this.closeHandlers.push(handler);
+    }
+
     private setReceiver() {
         this.ws.on('message', (msg: string) => {
             for (const handler of this.handlers) {
-                handler(msg, this.ws);
+                handler(msg, this);
+            }
+        })
+
+        this.ws.on('close', () => {
+            for (const handler of this.closeHandlers) {
+                handler(this);
             }
         })
     }

@@ -1,5 +1,4 @@
-import cuid from "cuid";
-import { ISocketInterface } from "../../shared/connection/websocket/types/ISocketInterface";
+import IConnectecSocketInterface from "../../shared/connection/websocket/types/IConnectedSocketInterface";
 import Instance from "./Intstance";
 
 
@@ -8,10 +7,16 @@ export default class InstanceManager {
 
     protected instanceList: Instance[] = [];
     protected instanceById: Record<string, Instance> = {};
-    protected playersByInstance: Record<string, ISocketInterface[]> = {};
+    protected playersByInstance: Record<string, IConnectecSocketInterface[]> = {};
 
 
     public constructor() {
+
+    }
+
+    public handleAction(action: any, socket: IConnectecSocketInterface) {
+        const inst = this.instanceById[action.instanceId];
+        inst.handleAction(action, socket)
 
     }
 
@@ -22,9 +27,14 @@ export default class InstanceManager {
             this.instanceList.push(instance)
             this.instanceById[instance.id] = instance;
 
-            instance.addOnPlayerAddListener((socket: ISocketInterface) => {
+            instance.addOnPlayerAddListener((socket: IConnectecSocketInterface) => {
                 const list = this.playersByInstance[instance.id] || [];
                 this.playersByInstance[instance.id] = [...list, socket]
+            })
+
+            instance.addOnPlayerRemovedListener((socket: IConnectecSocketInterface) => {
+                const list = this.playersByInstance[instance.id] || [];
+                this.playersByInstance[instance.id] = list.filter(e => e.getId() !== socket.getId());
             })
         }
     }
