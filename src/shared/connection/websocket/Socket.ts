@@ -1,3 +1,4 @@
+import cuid from "cuid";
 import DataSender from "./DataSender";
 import LifetimeTracker from "./LifetimeTracker";
 import { ISocketInterface } from "./types/ISocketInterface";
@@ -7,6 +8,7 @@ export type HandlerSignature = (msg: string, socket: ISocketInterface) => void;
 export default class Socket {
     protected handlers: HandlerSignature[] = [];
     protected ws: ISocketInterface;
+    protected id: string;
 
     protected sender?: DataSender;
     protected ltt?: LifetimeTracker;
@@ -14,6 +16,7 @@ export default class Socket {
     public constructor(ws: ISocketInterface) {
         this.ws = ws;
         this.setReceiver();
+        this.id = cuid();
     }
 
     public setSender(sender: DataSender) {
@@ -22,6 +25,11 @@ export default class Socket {
 
     public setLtt(ltt: LifetimeTracker) {
         this.ltt = ltt
+    }
+
+
+    public getId(): string {
+        return this.id;
     }
 
 

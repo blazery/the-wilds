@@ -9,7 +9,9 @@ export default class SocketWrapper implements ISocketInterface {
         this.ws = ws
     }
 
-    public send(msg: string | Object, opt: ISendOptions) {
+    public send(msg: string | Object, opt?: ISendOptions) {
+        if (this.readyState !== WebSocket.OPEN) return;
+
         if (typeof msg === "string") {
             this.ws.send(msg);
         } else {
@@ -45,15 +47,14 @@ export default class SocketWrapper implements ISocketInterface {
     }
 
     public ping() {
-        this.ws.send("ping");
+        this.send("ping");
     }
 
     public pong() {
-        this.ws.send("pong");
+        this.send("pong");
     }
 
     get readyState(): number {
         return this.ws.readyState;
     }
-
 }

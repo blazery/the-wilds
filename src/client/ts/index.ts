@@ -29,8 +29,8 @@ const socket = new WebSocket('ws://localhost:8999')
 const wrappedSocket = WebsocketFactory.setupSocket(new SocketWrapper(socket))
 
 
-wrappedSocket.registerHandler(() => {
-    socket.send('hello fuckers')
+wrappedSocket.registerHandler((msg) => {
+    console.log(msg);
 })
 
 wrappedSocket.send("hello fuckers")

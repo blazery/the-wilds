@@ -1708,6 +1708,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cuid@npm:^2":
+  version: 2.0.1
+  resolution: "@types/cuid@npm:2.0.1"
+  dependencies:
+    cuid: "*"
+  checksum: 54eef4216441081cb3e6159315a353da7b72d6fda02830af68dc4fd2a4d95908673f32304cbf522ad032053e7bbe4ecb03be94983bdc15e47348cdc982d85b3f
+  languageName: node
+  linkType: hard
+
 "@types/earcut@npm:^2.1.0":
   version: 2.1.1
   resolution: "@types/earcut@npm:2.1.1"
@@ -3506,6 +3515,13 @@ __metadata:
   dependencies:
     cssom: 0.3.x
   checksum: 7efb9731d68dd042f32e0e3bbc7c1096653ba521f21ab1c5b158862321e4fcbfb51070641b834fadc8dd070a634dd43f328177e00d1b8481b5143a3e09f3d3f6
+  languageName: node
+  linkType: hard
+
+"cuid@npm:*, cuid@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "cuid@npm:2.1.8"
+  checksum: 12b85b3f5150a6f0b9e4f345c8d98299d74647419151751fa1132f6702fe2b5388ceceb1c9b49bad7cab1b3ac033c7cedea8ffc034930f90005b8a4345025288
   languageName: node
   linkType: hard
 
@@ -7795,6 +7811,7 @@ __metadata:
     "@parcel/transformer-sass": ^2.0.0
     "@parcel/transformer-typescript-tsc": ^2.0.0
     "@types/cors": ^2
+    "@types/cuid": ^2
     "@types/express": ^4.17.13
     "@types/module-alias": ^2
     "@types/node": ^16.11.6
@@ -7802,6 +7819,7 @@ __metadata:
     "@yarnpkg/pnpify": ^3.1.1-rc.2
     "@yarnpkg/sdks": ^2.5.0
     cors: ^2.8.5
+    cuid: ^2.1.8
     express: ^4.17.1
     module-alias: ^2.2.2
     nodemon: ^2.0.14

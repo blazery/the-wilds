@@ -1,3 +1,4 @@
+import { WebSocket } from "ws";
 import { ISocketInterface, WebsocketStatus } from "./types/ISocketInterface";
 
 
@@ -5,6 +6,7 @@ export default class LifetimeTracker {
 
     protected ws: ISocketInterface;
     protected isAlive: boolean = false;
+    protected enabelMonitoring: boolean = false;
     protected timeout: NodeJS.Timeout | undefined;
 
     constructor(ws: ISocketInterface) {
@@ -29,25 +31,37 @@ export default class LifetimeTracker {
         const socket = this.ws;
         if (!socket) return;
 
-        if (socket.readyState !== WebsocketStatus.OPEN || !this.isAlive) {
+        if (!this.isAlive) {
             socket.terminate();
             return
         }
 
-        this.isAlive = false;
-        socket.ping();
-        this.timeout = setTimeout(() => this.checkHeartbeat(), 500);
+        if (this.ws.readyState === WebsocketStatus.OPEN) {
+            this.isAlive = false;
+            this.ws.send("ping", { binary: false });
+        }
+
+        if (this.enabelMonitoring) {
+            this.timeout = setTimeout(() => this.checkHeartbeat(), 1000);
+        }
     }
 
     protected setupListener() {
-        this.ws.on('pong', () => {
-            if (this.ws.readyState === WebsocketStatus.OPEN) {
+        this.ws.on('message', (msg: string | ArrayBuffer) => {
+
+            const msgtoUse = typeof msg === "string" ? msg : msg.toString();
+
+            if (msgtoUse === "pong") {
                 this.isAlive = true;
-                this.ws.pong();
+            } else if (msgtoUse === "ping") {
+                if (this.ws.readyState === WebsocketStatus.OPEN) {
+                    this.ws.send("pong", { binary: false });
+                }
             }
+
         })
+
         this.ws.on('close', () => {
-            this.isAlive = false;
             this.ws.terminate();
         })
     }

@@ -9,6 +9,8 @@ import cors from 'cors';
 
 import WebsocketFactory from '../shared/connection/websocket/WebsocketFactory';
 import { ISocketInterface } from '../shared/connection/websocket/types/ISocketInterface';
+import InstanceManager from './instance/InstanceManager';
+import InstanceFactory from './instance/InstanceFactory';
 
 const app = express();
 
@@ -18,18 +20,24 @@ const server = http.createServer(app);
 //initialize the WebSocket server instance 
 const wss = new WebSocket.Server({ server });
 
+const instanceManager = new InstanceManager();
+const intance = InstanceFactory.createInstance('');
+instanceManager.addInstance(intance)
+
 wss.on('connection', (ws: WebSocket) => {
 
     const socket = WebsocketFactory.setupSocket(ws);
 
-    socket.registerHandler((msg: string, socket: ISocketInterface) => {
+    socket.registerHandler((msg: string | ArrayBuffer, socket: ISocketInterface) => {
         //log the received message and send it back to the client
-        console.log('received: %s', msg);
-        ws.send(`Hello, you sent -> ${msg}`);
+        const msgtoUse = typeof msg === "string" ? msg : msg.toString();
+        console.log('received: %s', msgtoUse);
+        ws.send(`Hello, you sent -> ${msgtoUse}`);
     })
 
     //send immediatly a feedback to the incoming connection    
     socket.send('Hi there, I am a WebSocket server');
+    socket.send({ type: "connection/setup", "playerId": socket.getId() });
 });
 
 //start our server
