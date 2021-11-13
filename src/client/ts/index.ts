@@ -56,6 +56,12 @@ wrappedSocket.registerHandler((msg) => {
                 entityId = msgObject.entityId;
             }
             entities.push({ sprite, id: msgObject.entityId });
+        } else if (msgObject.type === 'entity/despawn') {
+            var ent = entities.find(e => e.id === msgObject.entityId);
+            if (ent) {
+                app.stage.removeChild(ent.sprite)
+                entities.splice(entities.indexOf(ent), 1)
+            }
         } else if (msgObject.type === 'connection/setup') {
             playerId = msgObject.playerId;
             instanceId = msgObject.instanceId;

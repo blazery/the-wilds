@@ -62,6 +62,15 @@ export default class Entity {
         })
     }
 
+    public despawn(): void {
+        this._context.instance.broadCast({
+            type: 'entity/despawn',
+            instanceId: this._context.instance.id,
+            actors: this._context.actor?.map(a => a.getId()) || [],
+            entityId: this.getId()
+        })
+    }
+
     public pickle(): Record<string, any> {
         return {
             entityId: this.getId(),

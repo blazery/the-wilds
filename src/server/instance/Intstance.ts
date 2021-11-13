@@ -50,13 +50,14 @@ export default class Instance implements IInstance {
         const index = this.players.indexOf(socket);
         if (index === -1) {
             this.players.push(socket)
-            socket.registerCloseHandler(() => {
-                this.triggerPlayerRemoved(socket)
-            })
-            this.triggerPlayerAdded(socket);
-
             const ent = new Entity({ instance: this, actor: [socket] })
             ent.addBehavior(createMovementBehaviour(ent))
+
+            socket.registerCloseHandler(() => {
+                this.triggerPlayerRemoved(socket)
+                this.despawnEntity(ent)
+            })
+            this.triggerPlayerAdded(socket);
             this.sendIntialGameState(socket);
             this.spawnEntity(ent);
         }
@@ -65,6 +66,15 @@ export default class Instance implements IInstance {
     public spawnEntity(ent: Entity) {
         this.entities.push(ent)
         ent.spawn();
+    }
+
+
+    public despawnEntity(ent: Entity) {
+        var index = this.entities.indexOf(ent)
+        if (index > -1) {
+            this.entities.splice(index, 1)
+            ent.despawn();
+        }
     }
 
     public sendIntialGameState(socket: IConnectecSocketInterface) {
