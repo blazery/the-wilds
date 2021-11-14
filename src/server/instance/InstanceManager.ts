@@ -17,7 +17,6 @@ export default class InstanceManager {
     public handleAction(action: any, socket: IConnectecSocketInterface) {
         const inst = this.instanceById[action.instanceId];
         inst.handleAction(action, socket)
-
     }
 
 

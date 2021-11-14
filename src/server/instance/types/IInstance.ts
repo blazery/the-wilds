@@ -1,4 +1,4 @@
-import IAction from "../../action/types/IAction";
+import { ActionUnion } from "../../../shared/action/types/server/IAction";
 import Entity from "../../entity/Entity";
 import IConnectecSocketInterface from "../../shared/connection/websocket/types/IConnectedSocketInterface";
 
@@ -13,6 +13,6 @@ export default interface IInstance {
     addOnPlayerAddListener(listener: PlayerAddListenerType): void
     addOnPlayerRemovedListener(listener: PlayerRemovedListenerType): void
     addPlayerToInstance(socket: IConnectecSocketInterface): void
-    broadCast(action: IAction): void
+    broadCast(action: ActionUnion): void
     getEntity(id: string): Entity | null
 }

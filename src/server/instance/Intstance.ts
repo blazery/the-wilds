@@ -1,7 +1,7 @@
 import cuid from "cuid";
 import { type } from "os";
 import IConnectecSocketInterface from "../../shared/connection/websocket/types/IConnectedSocketInterface";
-import IAction from "../action/types/IAction";
+import IAction, { IInstanceJoinAction, IInstanceWorldStateAction, INSTANCE_JOIN, INSTANCE_WORLDSTATE } from "../../shared/action/types/server/IAction";
 import createMovementBehaviour from "../entity/behavior/movementBehavior";
 import Entity from "../entity/Entity";
 import IInstance, { PlayerAddListenerType, PlayerRemovedListenerType } from "./types/IInstance";
@@ -57,6 +57,7 @@ export default class Instance implements IInstance {
                 this.triggerPlayerRemoved(socket)
                 this.despawnEntity(ent)
             })
+            this.sendPlayerJoinInstance(socket);
             this.triggerPlayerAdded(socket);
             this.sendIntialGameState(socket);
             this.spawnEntity(ent);
@@ -79,7 +80,11 @@ export default class Instance implements IInstance {
 
     public sendIntialGameState(socket: IConnectecSocketInterface) {
         const state = this.entities.map(e => e.pickle());
-        socket.send({ type: "instance/worldstate", entities: state })
+        socket.send({ type: INSTANCE_WORLDSTATE, entities: state } as IInstanceWorldStateAction)
+    }
+
+    public sendPlayerJoinInstance(socket: IConnectecSocketInterface) {
+        socket.send({ type: INSTANCE_JOIN, instanceId: this.id } as IInstanceJoinAction)
     }
 
     public handleAction(action: any, socket: IConnectecSocketInterface) {

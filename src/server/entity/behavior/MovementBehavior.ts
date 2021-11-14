@@ -1,4 +1,4 @@
-import IAction, { ActionUnion, IMovementAction } from "../../action/types/IAction";
+import { ActionUnion } from "../../../shared/action/types/client/IAction";
 import Entity from "../Entity";
 import SyncedData from "../SyncedData";
 import IEntityConstructionContext from "../types/IEntityConstructionContext";

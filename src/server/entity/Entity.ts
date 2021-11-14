@@ -1,10 +1,11 @@
 import cuid from "cuid"
-import IAction, { ActionUnion } from "../action/types/IAction";
+import IAction, { ActionUnion, ENTITY_DESPAWN, ENTITY_PROPERTY_UPDATE, ENTITY_SPAWN, IEntityData, IEntityDespawn, IEntityPropertyUpdate, IEntitySpawn } from "../../shared/action/types/server/IAction";
+import { ActionUnion as ClientActionUnion } from "../../shared/action/types/client/IAction";
 import SyncedData from "./SyncedData";
 import IEntityConstructionContext from "./types/IEntityConstructionContext";
 
 
-export type BahaviorSignature = (context: IEntityConstructionContext, action: ActionUnion, data: SyncedData) => void
+export type BahaviorSignature = (context: IEntityConstructionContext, action: ClientActionUnion, data: SyncedData) => void
 
 export default class Entity {
 
@@ -26,15 +27,15 @@ export default class Entity {
 
     public sendProperyUpdate(key: string, value: any) {
         this._context.instance.broadCast({
-            type: 'entity/property-update',
+            type: ENTITY_PROPERTY_UPDATE,
             instanceId: this._context.instance.id,
             entityId: this.getId(),
             key,
             value
-        })
+        } as IEntityPropertyUpdate)
     }
 
-    public handleAction(context: IEntityConstructionContext, action: IAction): void {
+    public handleAction(context: IEntityConstructionContext, action: ClientActionUnion): void {
         this._actionHandlers.forEach((hfn) => {
             hfn(context, action, this._syncedData)
         })
@@ -51,29 +52,30 @@ export default class Entity {
 
     public spawn(): void {
         this._context.instance.broadCast({
-            type: 'entity/spawn',
+            type: ENTITY_SPAWN,
             instanceId: this._context.instance.id,
             actors: this._context.actor?.map(a => a.getId()) || [],
-            entityId: this.getId(),
-            behaviors: [
-                'movementBehaviour'
-            ],
-            data: this._syncedData.pickle()
-        })
+            entityInfo: {
+                id: this.getId(),
+                behaviors: [
+                    'movementBehaviour'
+                ],
+                data: this._syncedData.pickle()
+            }
+        } as IEntitySpawn)
     }
 
     public despawn(): void {
         this._context.instance.broadCast({
-            type: 'entity/despawn',
+            type: ENTITY_DESPAWN,
             instanceId: this._context.instance.id,
-            actors: this._context.actor?.map(a => a.getId()) || [],
             entityId: this.getId()
-        })
+        } as IEntityDespawn)
     }
 
-    public pickle(): Record<string, any> {
+    public pickle(): IEntityData {
         return {
-            entityId: this.getId(),
+            id: this.getId(),
             behaviors: [
                 'movementBehaviour'
             ],

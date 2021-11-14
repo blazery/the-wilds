@@ -11,6 +11,7 @@ import WebsocketFactory from '../shared/connection/websocket/WebsocketFactory';
 import InstanceManager from './instance/InstanceManager';
 import InstanceFactory from './instance/InstanceFactory';
 import IConnectecSocketInterface from '../shared/connection/websocket/types/IConnectedSocketInterface';
+import { CONNECTION_SETUP, IConnectionSetupAction } from '../shared/action/types/server/IAction';
 
 const app = express();
 
@@ -44,7 +45,7 @@ wss.on('connection', (ws: WebSocket) => {
 
     //send immediatly a feedback to the incoming connection    
     socket.send('Hi there, I am a WebSocket server');
-    socket.send({ type: "connection/setup", "playerId": socket.getId(), instanceId: intance.id });
+    socket.send({ type: CONNECTION_SETUP, "playerId": socket.getId() } as IConnectionSetupAction);
     intance.addPlayerToInstance(socket);
 });
 
